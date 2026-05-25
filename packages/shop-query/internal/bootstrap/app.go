@@ -1,0 +1,53 @@
+package bootstrap
+
+import (
+	"context"
+	"fmt"
+	"log/slog"
+	"shop-query-module/internal/bootstrap/config"
+	"shop-query-module/internal/bootstrap/module"
+
+	configx "github.com/iamKienb/go-core/config"
+)
+
+type App struct {
+	logger *slog.Logger
+	infra  *module.InfraModule
+}
+
+func NewApp(logger *slog.Logger) *App {
+	return &App{logger: logger}
+}
+
+func (a *App) Start(ctx context.Context) error {
+	cfg, err := configx.Loader[config.UserQueryConfig]()
+	if err != nil {
+		return fmt.Errorf("load config: %w", err)
+	}
+
+	infra, err := module.NewInfraModule(cfg)
+	if err != nil {
+		return fmt.Errorf("infra: %w", err)
+	}
+	a.infra = infra
+
+	a.logger.Info("starting user query")
+
+	<-ctx.Done()
+	return nil
+}
+
+func (a *App) Stop(ctx context.Context) error {
+	a.logger.Info("shutting down")
+
+	if a.infra != nil && a.infra.ESService != nil {
+		a.logger.Info("closing elasticsearch client...")
+		if err := a.infra.ESService.Close(ctx); err != nil {
+			return fmt.Errorf("close elasticsearch: %w", err)
+		}
+	}
+
+	a.logger.Info("app stopped cleanly")
+
+	return nil
+}
