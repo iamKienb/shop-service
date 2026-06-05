@@ -4,7 +4,6 @@ import (
 	"shop-query-module/internal/application/port"
 
 	api "github.com/iamKienb/api-contract/gen/shop"
-	"google.golang.org/protobuf/types/known/structpb"
 )
 
 func ToShopView(shop *port.Shop) *api.ShopView {
@@ -19,7 +18,6 @@ func ToShopView(shop *port.Shop) *api.ShopView {
 		Profile:   ToShopProfileView(shop.Profile),
 		Addresses: ToShopAddressViews(shop.Addresses),
 		Members:   ToShopMemberViews(shop.Members),
-		Extra:     toProtoStruct(shop.Extra),
 	}
 }
 
@@ -35,7 +33,11 @@ func ToShopProfileView(profile *port.ShopProfile) *api.ShopProfileView {
 	if profile == nil {
 		return nil
 	}
-	return &api.ShopProfileView{Description: profile.Description, LogoUrl: profile.LogoURL, BannerUrl: profile.BannerURL, Extra: toProtoStruct(profile.Extra)}
+	return &api.ShopProfileView{
+		Description: profile.Description,
+		LogoUrl:     profile.LogoURL,
+		BannerUrl:   profile.BannerURL,
+	}
 }
 
 func ToShopAddressViews(addresses []port.ShopAddress) []*api.ShopAddressView {
@@ -49,7 +51,6 @@ func ToShopAddressViews(addresses []port.ShopAddress) []*api.ShopAddressView {
 			ContactName: address.ContactName,
 			PhoneNumber: address.PhoneNumber,
 			Type:        address.Type,
-			Extra:       toProtoStruct(address.Extra),
 		})
 	}
 	return views
@@ -58,18 +59,11 @@ func ToShopAddressViews(addresses []port.ShopAddress) []*api.ShopAddressView {
 func ToShopMemberViews(members []port.ShopMember) []*api.ShopMemberView {
 	views := make([]*api.ShopMemberView, 0, len(members))
 	for _, member := range members {
-		views = append(views, &api.ShopMemberView{Id: member.ID, Name: member.Name, RoleIds: member.RoleIDs, Extra: toProtoStruct(member.Extra)})
+		views = append(views, &api.ShopMemberView{
+			Id:      member.ID,
+			Name:    member.Name,
+			RoleIds: member.RoleIDs,
+		})
 	}
 	return views
-}
-
-func toProtoStruct(value map[string]any) *structpb.Struct {
-	if len(value) == 0 {
-		return nil
-	}
-	result, err := structpb.NewStruct(value)
-	if err != nil {
-		return nil
-	}
-	return result
 }

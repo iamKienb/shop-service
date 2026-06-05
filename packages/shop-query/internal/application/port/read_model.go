@@ -8,14 +8,13 @@ type Page struct {
 }
 
 type Shop struct {
-	ID        string         `json:"id"`
-	Name      string         `json:"name"`
-	Slug      string         `json:"slug"`
-	Status    string         `json:"status"`
-	Profile   *ShopProfile   `json:"profile"`
-	Addresses []ShopAddress  `json:"address"`
-	Members   []ShopMember   `json:"members"`
-	Extra     map[string]any `json:"-"`
+	ID        string        `json:"id"`
+	Name      string        `json:"name"`
+	Slug      string        `json:"slug"`
+	Status    string        `json:"status"`
+	Profile   *ShopProfile  `json:"profile"`
+	Addresses []ShopAddress `json:"address"`
+	Members   []ShopMember  `json:"members"`
 }
 
 func (s *Shop) UnmarshalJSON(data []byte) error {
@@ -35,28 +34,25 @@ func (s *Shop) UnmarshalJSON(data []byte) error {
 }
 
 type ShopProfile struct {
-	Description string         `json:"description"`
-	LogoURL     string         `json:"logo_url"`
-	BannerURL   string         `json:"banner_url"`
-	Extra       map[string]any `json:"-"`
+	Description string `json:"description"`
+	LogoURL     string `json:"logo_url"`
+	BannerURL   string `json:"banner_url"`
 }
 
 type ShopAddress struct {
-	ID          string         `json:"id"`
-	ShopID      string         `json:"shop_id"`
-	FullAddress string         `json:"full_address"`
-	AddressLine string         `json:"address_line"`
-	ContactName string         `json:"contact_name"`
-	PhoneNumber string         `json:"phone_number"`
-	Type        string         `json:"type"`
-	Extra       map[string]any `json:"-"`
+	ID          string `json:"id"`
+	ShopID      string `json:"shop_id"`
+	FullAddress string `json:"full_address"`
+	AddressLine string `json:"address_line"`
+	ContactName string `json:"contact_name"`
+	PhoneNumber string `json:"phone_number"`
+	Type        string `json:"type"`
 }
 
 type ShopMember struct {
-	ID      string         `json:"member_id"`
-	Name    string         `json:"member_name"`
-	RoleIDs []int32        `json:"role_ids"`
-	Extra   map[string]any `json:"-"`
+	ID      string  `json:"member_id"`
+	Name    string  `json:"member_name"`
+	RoleIDs []int32 `json:"role_ids"`
 }
 
 type ShopPage struct {

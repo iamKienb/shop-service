@@ -6,10 +6,9 @@ require (
 	connectrpc.com/connect v1.19.2
 	connectrpc.com/grpcreflect v1.3.0
 	github.com/elastic/go-elasticsearch/v8 v8.19.5
-	github.com/iamKienb/api-contract v0.2.4
+	github.com/iamKienb/api-contract v0.2.12
 	github.com/iamKienb/go-core v0.4.7
 	golang.org/x/net v0.52.0
-	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -31,4 +30,5 @@ require (
 	go.opentelemetry.io/otel/metric v1.43.0 // indirect
 	go.opentelemetry.io/otel/trace v1.43.0 // indirect
 	golang.org/x/text v0.35.0 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 )
