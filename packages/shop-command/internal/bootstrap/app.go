@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"shop-command-module/internal/bootstrap/config"
+	"shop-command-module/internal/bootstrap/module"
 	"strconv"
 	"time"
-	"user-command-module/internal/bootstrap/config"
-	"user-command-module/internal/bootstrap/module"
 
 	configx "github.com/iamKienb/go-core/config"
 	"golang.org/x/net/http2"

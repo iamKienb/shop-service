@@ -2,7 +2,7 @@ package member
 
 import (
 	"context"
-	"user-command-module/internal/domain/shared"
+	"shop-command-module/internal/domain/shared"
 )
 
 type QueryRepository interface {

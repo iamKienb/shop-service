@@ -2,8 +2,8 @@ package outbox
 
 import (
 	"context"
-	"user-command-module/db/repository"
-	"user-command-module/internal/application/port"
+	"shop-command-module/db/repository"
+	"shop-command-module/internal/application/port"
 
 	pgx "github.com/iamKienb/go-core/postgres"
 )

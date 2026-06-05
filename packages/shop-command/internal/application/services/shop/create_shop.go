@@ -3,13 +3,13 @@ package shop
 import (
 	"context"
 
-	"user-command-module/internal/application/commands/create_shop"
-	"user-command-module/internal/application/port"
-	"user-command-module/internal/application/shared"
+	"shop-command-module/internal/application/commands/create_shop"
+	"shop-command-module/internal/application/port"
+	"shop-command-module/internal/application/shared"
 
-	"user-command-module/internal/domain/member"
-	domain_shared "user-command-module/internal/domain/shared"
-	"user-command-module/internal/domain/shop"
+	"shop-command-module/internal/domain/member"
+	domain_shared "shop-command-module/internal/domain/shared"
+	"shop-command-module/internal/domain/shop"
 )
 
 func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (*create_shop.Result, error) {
@@ -21,38 +21,13 @@ func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (
 		return nil, s.wrapError(err)
 	}
 
-	addressType := domain_shared.ValidateEnum[shop.AddressTypeEnum](cmd.Address.Type)
-	if addressType == nil {
-		return nil, s.wrapError(shop.ErrAddressTypeInvalid)
-	}
-
 	newShop := shop.NewShop(shop.NewShopParams{
 		UserID:      cmd.User.ID,
 		Name:        cmd.Name,
 		Slug:        cmd.Slug,
-		Description: cmd.Profile.Description,
-		LogoUrl:     cmd.Profile.LogoUrl,
-		BannerUrl:   cmd.Profile.BannerUrl,
-		Address: shop.NewShopAddressParams{
-			UserID: cmd.User.ID,
-
-			CountryID:   cmd.Address.Country.ID,
-			CountryName: cmd.Address.Country.Name,
-
-			CityID:   cmd.Address.City.ID,
-			CityName: cmd.Address.City.Name,
-
-			DistrictID:   cmd.Address.District.ID,
-			DistrictName: cmd.Address.District.Name,
-
-			WardID:   cmd.Address.Ward.ID,
-			WardName: cmd.Address.Ward.Name,
-
-			AddressLine: cmd.Address.AddressLine,
-			ContactName: cmd.Address.ContactName,
-			PhoneNumber: cmd.Address.PhoneNumber,
-			Type:        *addressType,
-		},
+		Description: descriptionOf(cmd.Profile),
+		LogoUrl:     logoURLOf(cmd.Profile),
+		BannerUrl:   bannerURLOf(cmd.Profile),
 	})
 
 	newMember := member.NewMember(member.NewMemberParams{
@@ -64,19 +39,27 @@ func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (
 		RoleIDs:     []domain_shared.RoleID{member.RoleOwnerID},
 	})
 
+	var outboxParams []port.OutboxParam
+
+	if shopEvents := newShop.FlushEvents(); len(shopEvents) > 0 {
+		outboxParams = append(outboxParams, port.OutboxParam{
+			AggregateID:   newShop.ID.RawID(),
+			AggregateType: newShop.Type(),
+			Events:        shopEvents,
+		})
+	}
+
+	if memberEvents := newMember.FlushEvents(); len(memberEvents) > 0 {
+		outboxParams = append(outboxParams, port.OutboxParam{
+			AggregateID:   newMember.MemberID.RawID(),
+			AggregateType: newMember.Type(),
+			Events:        memberEvents,
+		})
+	}
+
 	if err := s.txManager.WithTx(ctx, func(ctx context.Context) error {
 		if err := s.shopRepo.CreateShop(ctx, newShop); err != nil {
 			return err
-		}
-
-		if shopEvents := newShop.FlushEvents(); len(shopEvents) > 0 {
-			if err := s.outboxService.Publish(ctx, port.OutboxParam{
-				AggregateID:   newShop.ID.RawID(),
-				AggregateType: newShop.Type(),
-				Events:        shopEvents,
-			}); err != nil {
-				return err
-			}
 		}
 
 		membersToSave := []*member.Member{newMember}
@@ -84,14 +67,8 @@ func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (
 			return err
 		}
 
-		if memberEvents := newMember.FlushEvents(); len(memberEvents) > 0 {
-			if err := s.outboxService.Publish(ctx, port.OutboxParam{
-				AggregateID:   newMember.MemberID.RawID(),
-				AggregateType: newMember.Type(),
-				Events:        memberEvents,
-			}); err != nil {
-				return err
-			}
+		if len(outboxParams) > 0 {
+			return s.outboxService.PublishBatch(ctx, outboxParams)
 		}
 
 		return nil
@@ -108,6 +85,30 @@ func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (
 	return &create_shop.Result{
 		ShopID: newShop.ID.String(),
 	}, nil
+}
+
+func descriptionOf(profile *create_shop.Profile) *string {
+	if profile == nil {
+		return nil
+	}
+
+	return profile.Description
+}
+
+func logoURLOf(profile *create_shop.Profile) *string {
+	if profile == nil {
+		return nil
+	}
+
+	return profile.LogoUrl
+}
+
+func bannerURLOf(profile *create_shop.Profile) *string {
+	if profile == nil {
+		return nil
+	}
+
+	return profile.BannerUrl
 }
 
 func (s *shopService) checkIdempotency(ctx context.Context, userID domain_shared.UserID) error {

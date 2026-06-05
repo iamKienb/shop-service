@@ -1,6 +1,6 @@
 package shop
 
-import "user-command-module/internal/domain/shared"
+import "shop-command-module/internal/domain/shared"
 
 type NewShopAddressParams struct {
 	UserID shared.UserID
@@ -32,5 +32,4 @@ type NewShopParams struct {
 	Description *string
 	LogoUrl     *string
 	BannerUrl   *string
-	Address     NewShopAddressParams
 }

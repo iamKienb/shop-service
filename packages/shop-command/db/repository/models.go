@@ -28,14 +28,6 @@ type District struct {
 	Type   pgtype.Text
 }
 
-type LoginStat struct {
-	UserID       pgtype.UUID
-	FailedCount  int32
-	LockUntil    pgtype.Timestamptz
-	LastFailedAt pgtype.Timestamptz
-	UpdatedAt    pgtype.Timestamptz
-}
-
 type Outbox struct {
 	ID             pgtype.UUID
 	AggregateID    pgtype.UUID
@@ -106,51 +98,6 @@ type ShopRole struct {
 	ID   int32
 	Code string
 	Name string
-}
-
-type User struct {
-	ID              pgtype.UUID
-	Email           string
-	EmailVerifiedAt pgtype.Timestamptz
-	Status          string
-	Roles           []string
-	CreatedAt       pgtype.Timestamptz
-	UpdatedAt       pgtype.Timestamptz
-	DeletedAt       pgtype.Timestamptz
-}
-
-type UserAddress struct {
-	ID           pgtype.UUID
-	UserID       pgtype.UUID
-	CountryID    int32
-	CityID       int32
-	DistrictID   int32
-	WardID       int32
-	AddressLine  string
-	ReceiverName string
-	PhoneNumber  string
-	Label        string
-	IsDefault    bool
-	CreatedAt    pgtype.Timestamptz
-	UpdatedAt    pgtype.Timestamptz
-}
-
-type UserCredential struct {
-	UserID            pgtype.UUID
-	PasswordHash      string
-	PasswordVersion   int32
-	PasswordUpdatedAt pgtype.Timestamptz
-}
-
-type UserProfile struct {
-	UserID      pgtype.UUID
-	FullName    string
-	Gender      string
-	PhoneNumber pgtype.Text
-	AvatarUrl   pgtype.Text
-	DateOfBirth pgtype.Date
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
 }
 
 type Ward struct {

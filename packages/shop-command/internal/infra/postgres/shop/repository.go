@@ -3,8 +3,8 @@ package shop
 import (
 	"context"
 	"errors"
-	"user-command-module/db/repository"
-	domain_shop "user-command-module/internal/domain/shop"
+	"shop-command-module/db/repository"
+	domain_shop "shop-command-module/internal/domain/shop"
 
 	pgx "github.com/iamKienb/go-core/postgres"
 	"github.com/jackc/pgx/v5/pgconn"

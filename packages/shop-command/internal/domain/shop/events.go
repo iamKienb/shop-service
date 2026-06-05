@@ -1,8 +1,8 @@
 package shop
 
 import (
+	"shop-command-module/internal/domain/shared"
 	"time"
-	"user-command-module/internal/domain/shared"
 )
 
 type ShopCreatedEvent struct {
@@ -41,7 +41,7 @@ type ShopProfileCreatedEvent struct {
 }
 
 func (e ShopProfileCreatedEvent) EventName() string {
-	return "shop-service.shop.created"
+	return "shop-service.shop.profile.created"
 }
 
 func (e ShopProfileCreatedEvent) IntegrationPayload() map[string]interface{} {
@@ -69,7 +69,7 @@ func (e ShopActivatedEvent) EventName() string {
 func (e ShopActivatedEvent) IntegrationPayload() map[string]interface{} {
 	return map[string]interface{}{
 		"shop_id":    e.ShopID.String(),
-		"status":     e.Status,
+		"status":     string(e.Status),
 		"updated_by": e.UpdatedBy.String(),
 		"updated_at": e.UpdatedAt,
 	}

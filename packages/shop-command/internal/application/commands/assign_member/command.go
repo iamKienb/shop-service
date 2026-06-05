@@ -2,7 +2,7 @@ package assign_member
 
 import (
 	"context"
-	"user-command-module/internal/domain/shared"
+	"shop-command-module/internal/domain/shared"
 )
 
 type User struct {

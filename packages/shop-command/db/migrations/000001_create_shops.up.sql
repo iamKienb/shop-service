@@ -1,12 +1,12 @@
 CREATE TABLE shops (
     id UUID PRIMARY KEY,
-    owner_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    owner_id UUID NOT NULL,
     name TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     status TEXT NOT NULL DEFAULT 'PENDING',
 
-    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_by UUID NOT NULL,
+    updated_by UUID,
     
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT NULL,

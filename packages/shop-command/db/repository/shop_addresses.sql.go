@@ -37,7 +37,7 @@ func (q *Queries) CheckRequiredAddresses(ctx context.Context, shopID pgtype.UUID
 	return i, err
 }
 
-const saveShopAddress = `-- name: SaveShopAddress :exec
+const createShopAddress = `-- name: CreateShopAddress :exec
 INSERT INTO shop_addresses (
     id,
     shop_id, 
@@ -61,7 +61,7 @@ INSERT INTO shop_addresses (
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
 `
 
-type SaveShopAddressParams struct {
+type CreateShopAddressParams struct {
 	ID          pgtype.UUID
 	ShopID      pgtype.UUID
 	CountryID   int32
@@ -78,8 +78,8 @@ type SaveShopAddressParams struct {
 	UpdatedBy   pgtype.UUID
 }
 
-func (q *Queries) SaveShopAddress(ctx context.Context, arg SaveShopAddressParams) error {
-	_, err := q.db.Exec(ctx, saveShopAddress,
+func (q *Queries) CreateShopAddress(ctx context.Context, arg CreateShopAddressParams) error {
+	_, err := q.db.Exec(ctx, createShopAddress,
 		arg.ID,
 		arg.ShopID,
 		arg.CountryID,
@@ -96,4 +96,60 @@ func (q *Queries) SaveShopAddress(ctx context.Context, arg SaveShopAddressParams
 		arg.UpdatedBy,
 	)
 	return err
+}
+
+const listShopAddressesByShopID = `-- name: ListShopAddressesByShopID :many
+SELECT
+    id,
+    shop_id,
+    country_id,
+    city_id,
+    district_id,
+    ward_id,
+    address_line,
+    contact_name,
+    phone_number,
+    type,
+    created_by,
+    updated_by,
+    created_at,
+    updated_at
+FROM shop_addresses
+WHERE shop_id = $1
+ORDER BY created_at ASC
+`
+
+func (q *Queries) ListShopAddressesByShopID(ctx context.Context, shopID pgtype.UUID) ([]ShopAddress, error) {
+	rows, err := q.db.Query(ctx, listShopAddressesByShopID, shopID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ShopAddress
+	for rows.Next() {
+		var i ShopAddress
+		if err := rows.Scan(
+			&i.ID,
+			&i.ShopID,
+			&i.CountryID,
+			&i.CityID,
+			&i.DistrictID,
+			&i.WardID,
+			&i.AddressLine,
+			&i.ContactName,
+			&i.PhoneNumber,
+			&i.Type,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	domain_member "user-command-module/internal/domain/member"
-	"user-command-module/internal/domain/shared"
+	domain_member "shop-command-module/internal/domain/member"
+	"shop-command-module/internal/domain/shared"
 
 	"github.com/jackc/pgx/v5"
 )

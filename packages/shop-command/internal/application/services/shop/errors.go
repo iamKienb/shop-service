@@ -1,9 +1,9 @@
 package shop
 
 import (
-	"user-command-module/internal/application/services/shop/i18n"
-	"user-command-module/internal/domain/member"
-	"user-command-module/internal/domain/shop"
+	"shop-command-module/internal/application/services/shop/i18n"
+	"shop-command-module/internal/domain/member"
+	"shop-command-module/internal/domain/shop"
 
 	"github.com/iamKienb/go-core/app_error"
 )
@@ -14,6 +14,7 @@ var shopErrorMap = app_error.ServiceErrorMap{
 	shop.ErrShopNotFound:       {Kind: app_error.KindNotFound, Msg: i18n.MsgShopNotFound},
 	shop.ErrShopInvalid:        {Kind: app_error.KindValidation, Msg: i18n.MsgShopInvalid},
 	shop.ErrAddressTypeInvalid: {Kind: app_error.KindValidation, Msg: i18n.MsgAddressTypeInvalid},
+	shop.ErrShopNotAllowed:     {Kind: app_error.KindForbidden, Msg: i18n.MsgShopNotAllowed},
 
 	member.ErrActionNotDefined: {Kind: app_error.KindValidation, Msg: i18n.MsgActionInvalid},
 	member.ErrShopDenied:       {Kind: app_error.KindForbidden, Msg: i18n.MsgShopDenied},

@@ -11,7 +11,7 @@ type InfraModule struct {
 	ESService esx.ESXService
 }
 
-func NewInfraModule(cfg *config.UserQueryConfig) (*InfraModule, error) {
+func NewInfraModule(cfg *config.ShopQueryConfig) (*InfraModule, error) {
 	esService, err := esx.New(cfg.ES)
 	if err != nil {
 		return nil, fmt.Errorf("elasticsearch: %w", err)

@@ -2,8 +2,8 @@ package port
 
 import (
 	"context"
+	"shop-command-module/internal/domain/shared"
 	"time"
-	"user-command-module/internal/domain/shared"
 )
 
 type ShopCache interface {

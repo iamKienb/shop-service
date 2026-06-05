@@ -3,9 +3,9 @@ package cache
 import (
 	"context"
 	"fmt"
+	"shop-command-module/internal/application/port"
+	"shop-command-module/internal/domain/shared"
 	"time"
-	"user-command-module/internal/application/port"
-	"user-command-module/internal/domain/shared"
 
 	redisx "github.com/iamKienb/go-core/redis"
 	"github.com/redis/go-redis/v9"

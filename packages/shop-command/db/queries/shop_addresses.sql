@@ -4,9 +4,13 @@ INSERT INTO shop_addresses (
     shop_id, 
 
     country_id,
-    city_id,
-    district_id, 
+    country_name,
+
+    province_id,
+    province_name,
+
     ward_id,
+    ward_name,
 
     address_line,
     contact_name,
@@ -19,7 +23,31 @@ INSERT INTO shop_addresses (
     created_by,
     updated_by
 )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);
+VALUES (
+    @id::uuid,
+    @shop_id::uuid,
+
+    @country_id::text,
+    @country_name::text,
+
+    @province_id::text,
+    @province_name::text,
+
+    @ward_id::text,
+    @ward_name::text,
+
+    address_line::text,
+    contact_name::text,
+    phone_number::text,
+    type::text,
+
+    created_at::TIMESTAMPTZ,
+    updated_at::TIMESTAMPTZ,
+
+    created_by::uuid,
+    updated_by::uuid
+);
+
 
 -- name: CheckRequiredAddresses :one
 SELECT 

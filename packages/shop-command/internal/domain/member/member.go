@@ -1,8 +1,8 @@
 package member
 
 import (
+	"shop-command-module/internal/domain/shared"
 	"time"
-	"user-command-module/internal/domain/shared"
 )
 
 const (

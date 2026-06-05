@@ -3,7 +3,7 @@ package member
 import (
 	"context"
 	"fmt"
-	domain_member "user-command-module/internal/domain/member"
+	domain_member "shop-command-module/internal/domain/member"
 )
 
 func (r *memberRepository) SaveMembers(ctx context.Context, members []*domain_member.Member) error {

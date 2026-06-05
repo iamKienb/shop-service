@@ -2,50 +2,85 @@ package shop
 
 import (
 	"context"
-	"user-command-module/internal/application/commands/add_shop_address"
+
+	"shop-command-module/internal/application/commands/add_shop_address"
+	"shop-command-module/internal/application/port"
+	"shop-command-module/internal/domain/member"
+	"shop-command-module/internal/domain/shared"
+	"shop-command-module/internal/domain/shop"
 )
 
 func (s *shopService) AddAddress(ctx context.Context, cmd add_shop_address.Command) (*add_shop_address.Result, error) {
-	// 1. Load Aggregate Root lên (Chỉ cần thông tin Shop gốc để check Status, chưa cần load mảng Addresses)
-	// currentShop, err := s.shopRepo.FindByID(ctx, cmd.ShopID)
-	// if err != nil {
-	// 	return err
-	// }
-	// if currentShop == nil {
-	// 	return shop.ErrShopNotFound
-	// }
+	if err := s.authorize(ctx, cmd.ShopID, cmd.UserID, member.ActionShopManageAddress); err != nil {
+		return nil, s.wrapError(err)
+	}
 
-	// // 2. Thực thi nghiệp vụ bên trong Domain và nhận về Entity Address mới cùng error
-	// // (Đoạn check Banned/Inactive tự chạy bên trong hàm này)
-	// newAddress, err := currentShop.AddAddress(shop.NewShopAddressParams{
-	// 	UserID:      cmd.UserID,
-	// 	CountryID:   cmd.CountryID,
-	// 	CityID:      cmd.CityID,
-	// 	AddressLine: cmd.AddressLine,
-	// })
-	// if err != nil {
-	// 	return err // Trả về lỗi nghiệp vụ (ví dụ: Shop bị Banned) cho phía Client biết
-	// }
+	currentShop, err := s.shopRepo.FindByID(ctx, cmd.ShopID)
+	if err != nil {
+		return nil, s.wrapError(err)
+	}
+	if currentShop == nil {
+		return nil, s.wrapError(shop.ErrShopNotFound)
+	}
 
-	// // 3. Thực hiện lưu xuống DB trong Transaction nếu cần (Unit of Work)
-	// if err := s.txManager.WithTx(ctx, func(ctx context.Context) error {
-	// 	// Lưu địa chỉ mới tạo
-	// 	if err := s.addressRepo.CreateAddress(ctx, newAddress); err != nil {
-	// 		return err
-	// 	}
+	addressType := shared.ValidateEnum[shop.AddressTypeEnum](cmd.Type)
+	if addressType == nil {
+		return nil, s.wrapError(shop.ErrAddressTypeInvalid)
+	}
 
-	// 	// Thu thập và publish Domain Event phát sinh (ShopAddressAddedEvent)
-	// 	if events := currentShop.FlushEvents(); len(events) > 0 {
-	// 		err := s.outboxService.Publish(ctx, events)
-	// 		if err != nil {
-	// 			return err
-	// 		}
-	// 	}
+	newAddress, err := currentShop.AddAddress(shop.NewShopAddressParams{
+		UserID: cmd.UserID,
+		ShopID: currentShop.ID,
 
-	// 	return nil
-	// }); err != nil {
-	// 	return err
-	// }
+		CountryID:   cmd.Country.ID,
+		CountryName: cmd.Country.Name,
+		CityID:      cmd.City.ID,
+		CityName:    cmd.City.Name,
 
-	return nil, nil
+		DistrictID:   cmd.District.ID,
+		DistrictName: cmd.District.Name,
+		WardID:       cmd.Ward.ID,
+		WardName:     cmd.Ward.Name,
+
+		AddressLine: cmd.AddressLine,
+		ContactName: cmd.ContactName,
+		PhoneNumber: cmd.PhoneNumber,
+		Type:        *addressType,
+	})
+	if err != nil {
+		return nil, s.wrapError(err)
+	}
+
+	var outboxParams []port.OutboxParam
+	if events := currentShop.FlushEvents(); len(events) > 0 {
+		outboxParams = append(outboxParams, port.OutboxParam{
+			AggregateID:   currentShop.ID.RawID(),
+			AggregateType: currentShop.Type(),
+			Events:        events,
+		})
+	}
+
+	if err := s.txManager.WithTx(ctx, func(ctx context.Context) error {
+		if err := s.shopRepo.CreateAddress(ctx, newAddress); err != nil {
+			return err
+		}
+
+		if currentShop.IsActive() {
+			if err := s.shopRepo.UpdateStatus(ctx, currentShop); err != nil {
+				return err
+			}
+		}
+
+		if len(outboxParams) > 0 {
+			return s.outboxService.PublishBatch(ctx, outboxParams)
+		}
+
+		return nil
+	}); err != nil {
+		return nil, s.wrapError(err)
+	}
+
+	return &add_shop_address.Result{
+		ShopAddressID: newAddress.ID.String(),
+	}, nil
 }

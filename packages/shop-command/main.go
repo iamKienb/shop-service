@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"shop-command-module/internal/bootstrap"
 	"syscall"
 	"time"
-	"user-command-module/internal/bootstrap"
 )
 
 func main() {

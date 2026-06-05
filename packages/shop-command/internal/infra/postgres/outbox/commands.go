@@ -3,7 +3,7 @@ package outbox
 import (
 	"context"
 	"fmt"
-	"user-command-module/internal/application/port"
+	"shop-command-module/internal/application/port"
 )
 
 func (r *outboxRepository) SaveOutbox(ctx context.Context, event *port.OutboxEvent) error {

@@ -3,8 +3,8 @@ package member
 import (
 	"context"
 	"errors"
-	"user-command-module/db/repository"
-	domain_member "user-command-module/internal/domain/member"
+	"shop-command-module/db/repository"
+	domain_member "shop-command-module/internal/domain/member"
 
 	pgx "github.com/iamKienb/go-core/postgres"
 	"github.com/jackc/pgx/v5/pgconn"

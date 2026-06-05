@@ -9,5 +9,5 @@ var (
 	ErrShopConflict       = errors.New("create_shop_too_fast")
 	ErrShopNotFound       = errors.New("shop_not_found")
 
-	ErrShopNotAllowed = errors.New("shop_not_allowed ")
+	ErrShopNotAllowed = errors.New("shop_not_allowed")
 )

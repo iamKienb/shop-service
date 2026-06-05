@@ -1,6 +1,6 @@
 package member
 
-import "user-command-module/internal/domain/shared"
+import "shop-command-module/internal/domain/shared"
 
 type NewMemberParams struct {
 	ShopID shared.ShopID

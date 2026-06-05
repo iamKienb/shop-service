@@ -2,7 +2,7 @@ package add_shop_address
 
 import (
 	"context"
-	"user-command-module/internal/domain/shared"
+	"shop-command-module/internal/domain/shared"
 )
 
 type LocationInfo struct {

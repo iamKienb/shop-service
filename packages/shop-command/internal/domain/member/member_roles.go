@@ -1,7 +1,7 @@
 package member
 
 import (
-	"user-command-module/internal/domain/shared"
+	"shop-command-module/internal/domain/shared"
 )
 
 type MemberRole struct {

@@ -2,6 +2,7 @@ package config
 
 import configx "github.com/iamKienb/go-core/config"
 
-type UserQueryConfig struct {
-	ES configx.ElasticSearchConfig `envPrefix:"USER_QUERY_SERVICE"`
+type ShopQueryConfig struct {
+	ES     configx.ElasticSearchConfig `envPrefix:"SHOP_QUERY_SERVICE"`
+	Server configx.Server              `envPrefix:"SHOP_QUERY_SERVICE"`
 }

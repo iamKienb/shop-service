@@ -11,29 +11,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const getShopProfileByID = `-- name: GetShopProfileByID :one
-SELECT shop_id, description, logo_url, banner_url, created_by, updated_by, created_at, updated_at
-FROM shop_profiles
-WHERE shop_id = $1
-`
-
-func (q *Queries) GetShopProfileByID(ctx context.Context, shopID pgtype.UUID) (ShopProfile, error) {
-	row := q.db.QueryRow(ctx, getShopProfileByID, shopID)
-	var i ShopProfile
-	err := row.Scan(
-		&i.ShopID,
-		&i.Description,
-		&i.LogoUrl,
-		&i.BannerUrl,
-		&i.CreatedBy,
-		&i.UpdatedBy,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const saveShopProfile = `-- name: SaveShopProfile :exec
+const createShopProfile = `-- name: CreateShopProfile :exec
 INSERT INTO shop_profiles (
     shop_id,
     description,
@@ -47,7 +25,7 @@ INSERT INTO shop_profiles (
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 `
 
-type SaveShopProfileParams struct {
+type CreateShopProfileParams struct {
 	ShopID      pgtype.UUID
 	Description pgtype.Text
 	LogoUrl     pgtype.Text
@@ -58,8 +36,8 @@ type SaveShopProfileParams struct {
 	UpdatedAt   pgtype.Timestamptz
 }
 
-func (q *Queries) SaveShopProfile(ctx context.Context, arg SaveShopProfileParams) error {
-	_, err := q.db.Exec(ctx, saveShopProfile,
+func (q *Queries) CreateShopProfile(ctx context.Context, arg CreateShopProfileParams) error {
+	_, err := q.db.Exec(ctx, createShopProfile,
 		arg.ShopID,
 		arg.Description,
 		arg.LogoUrl,
@@ -70,4 +48,26 @@ func (q *Queries) SaveShopProfile(ctx context.Context, arg SaveShopProfileParams
 		arg.UpdatedAt,
 	)
 	return err
+}
+
+const findShopProfileByID = `-- name: FindShopProfileByID :one
+SELECT shop_id, description, logo_url, banner_url, created_by, updated_by, created_at, updated_at
+FROM shop_profiles
+WHERE shop_id = $1
+`
+
+func (q *Queries) FindShopProfileByID(ctx context.Context, shopID pgtype.UUID) (ShopProfile, error) {
+	row := q.db.QueryRow(ctx, findShopProfileByID, shopID)
+	var i ShopProfile
+	err := row.Scan(
+		&i.ShopID,
+		&i.Description,
+		&i.LogoUrl,
+		&i.BannerUrl,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }

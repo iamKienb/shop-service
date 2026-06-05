@@ -25,31 +25,7 @@ func (q *Queries) CountBySlug(ctx context.Context, slug string) (int32, error) {
 	return column_1, err
 }
 
-const getShopByID = `-- name: GetShopByID :one
-SELECT id, owner_id, name, slug, status, created_by, updated_by, created_at, updated_at, deleted_at
-FROM shops
-WHERE id = $1
-`
-
-func (q *Queries) GetShopByID(ctx context.Context, id pgtype.UUID) (Shop, error) {
-	row := q.db.QueryRow(ctx, getShopByID, id)
-	var i Shop
-	err := row.Scan(
-		&i.ID,
-		&i.OwnerID,
-		&i.Name,
-		&i.Slug,
-		&i.Status,
-		&i.CreatedBy,
-		&i.UpdatedBy,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.DeletedAt,
-	)
-	return i, err
-}
-
-const saveShop = `-- name: SaveShop :exec
+const createShop = `-- name: CreateShop :exec
 INSERT INTO shops (
     id,
     owner_id,
@@ -64,7 +40,7 @@ INSERT INTO shops (
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 `
 
-type SaveShopParams struct {
+type CreateShopParams struct {
 	ID        pgtype.UUID
 	OwnerID   pgtype.UUID
 	Name      string
@@ -76,8 +52,8 @@ type SaveShopParams struct {
 	UpdatedAt pgtype.Timestamptz
 }
 
-func (q *Queries) SaveShop(ctx context.Context, arg SaveShopParams) error {
-	_, err := q.db.Exec(ctx, saveShop,
+func (q *Queries) CreateShop(ctx context.Context, arg CreateShopParams) error {
+	_, err := q.db.Exec(ctx, createShop,
 		arg.ID,
 		arg.OwnerID,
 		arg.Name,
@@ -89,6 +65,30 @@ func (q *Queries) SaveShop(ctx context.Context, arg SaveShopParams) error {
 		arg.UpdatedAt,
 	)
 	return err
+}
+
+const findShopByID = `-- name: FindShopByID :one
+SELECT id, owner_id, name, slug, status, created_by, updated_by, created_at, updated_at, deleted_at
+FROM shops
+WHERE id = $1
+`
+
+func (q *Queries) FindShopByID(ctx context.Context, id pgtype.UUID) (Shop, error) {
+	row := q.db.QueryRow(ctx, findShopByID, id)
+	var i Shop
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Name,
+		&i.Slug,
+		&i.Status,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
+	return i, err
 }
 
 const updateShopStatus = `-- name: UpdateShopStatus :exec

@@ -1,9 +1,8 @@
 package shop
 
 import (
-	"errors"
+	"shop-command-module/internal/domain/shared"
 	"time"
-	"user-command-module/internal/domain/shared"
 )
 
 type ShopStatus string
@@ -89,9 +88,6 @@ func NewShop(params NewShopParams) *Shop {
 		CreatedAt:   now,
 	})
 
-	params.Address.ShopID = shopID
-	shop.AddAddress(params.Address)
-
 	return shop
 }
 
@@ -164,36 +160,21 @@ func (s *Shop) AddAddress(params NewShopAddressParams) (*ShopAddress, error) {
 	return &address, nil
 }
 
-func (s *Shop) ActivateIfNeeded(userID shared.UserID) error {
+func (s *Shop) TryActivate(userID shared.UserID) (bool, error) {
 	if s.Status == StatusActive {
-		return nil
+		return false, nil
 	}
 
 	if s.Status == StatusBanned {
-		return errors.New("cannot activate a banned shop")
+		return false, ErrShopNotAllowed
 	}
 
-	if s.Name == "" || s.Profile.Description == nil {
-		return errors.New("shop name and description are required for activation")
+	if !s.isActivationReady() {
+		return false, nil
 	}
 
-	if s.Profile.LogoUrl == nil {
-		return errors.New("shop logo is required for activation")
-	}
-
-	hasPickupAddress := false
-	for _, addr := range s.Addresses {
-		if addr.Type == TypePickup || addr.Type == TypeReturn {
-			hasPickupAddress = true
-			break
-		}
-	}
-	if !hasPickupAddress {
-		return errors.New("shop must have at least one pickup address before activation")
-	}
-
-	s.Status = StatusActive
 	now := time.Now().UTC()
+	s.Status = StatusActive
 	s.UpdatedAt = &now
 	s.UpdatedBy = &userID
 
@@ -204,7 +185,7 @@ func (s *Shop) ActivateIfNeeded(userID shared.UserID) error {
 		UpdatedAt: *s.UpdatedAt,
 	})
 
-	return nil
+	return true, nil
 }
 
 func (s *Shop) Type() string {
@@ -217,4 +198,26 @@ func (s *Shop) MatchesSlug(slug string) bool {
 
 func (s *Shop) IsActive() bool {
 	return s.Status == StatusActive
+}
+
+func (s *Shop) isActivationReady() bool {
+	if s.Name == "" || isBlankPointer(s.Profile.Description) || isBlankPointer(s.Profile.LogoUrl) {
+		return false
+	}
+
+	return s.hasAddressType(TypePickup) && s.hasAddressType(TypeReturn)
+}
+
+func (s *Shop) hasAddressType(addressType AddressTypeEnum) bool {
+	for _, addr := range s.Addresses {
+		if addr.Type == addressType {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isBlankPointer(value *string) bool {
+	return value == nil || *value == ""
 }

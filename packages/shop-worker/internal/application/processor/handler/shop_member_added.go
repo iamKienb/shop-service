@@ -12,8 +12,8 @@ type ShopMemberAddedHandler struct {
 	alias string
 }
 
-func NewShopMemberAddedHandler(repo port.ESRepository, alias string) *ShopAddressAddedHandler {
-	return &ShopAddressAddedHandler{repo: repo, alias: alias}
+func NewShopMemberAddedHandler(repo port.ESRepository, alias string) *ShopMemberAddedHandler {
+	return &ShopMemberAddedHandler{repo: repo, alias: alias}
 }
 
 func (h *ShopMemberAddedHandler) Handle(ctx context.Context, raw json.RawMessage) error {
@@ -22,21 +22,22 @@ func (h *ShopMemberAddedHandler) Handle(ctx context.Context, raw json.RawMessage
 		return err
 	}
 
+	roleIDs := make([]int32, 0, len(payload.Roles))
+	for _, role := range payload.Roles {
+		roleIDs = append(roleIDs, int32(role.ID))
+	}
+
 	doc := map[string]any{
 		"members": map[string]any{
 			"member_id":   payload.MemberID,
 			"member_name": payload.MemberName,
+			"role_ids":    roleIDs,
 
 			"added_by":      payload.AddedBy,
 			"name_added_by": payload.NameAddedBy,
 
 			"joined_at": payload.JoinedAt,
-
-			// "roles": map[string]any{
-			// 	"id": payload.Roles
-			// 	"code"
-			// 	"name"
-			// }
+			"roles":     payload.Roles,
 		},
 	}
 

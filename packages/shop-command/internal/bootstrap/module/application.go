@@ -1,13 +1,13 @@
 package module
 
 import (
-	"user-command-module/internal/application/commands/add_shop_address"
-	"user-command-module/internal/application/commands/assign_member"
-	"user-command-module/internal/application/commands/create_shop"
-	"user-command-module/internal/application/queries/check_permission"
-	"user-command-module/internal/application/services/outbox"
-	"user-command-module/internal/application/services/shop"
-	"user-command-module/internal/domain/member"
+	"shop-command-module/internal/application/commands/add_shop_address"
+	"shop-command-module/internal/application/commands/assign_member"
+	"shop-command-module/internal/application/commands/create_shop"
+	"shop-command-module/internal/application/queries/check_permission"
+	"shop-command-module/internal/application/services/outbox"
+	"shop-command-module/internal/application/services/shop"
+	"shop-command-module/internal/domain/member"
 )
 
 type ApplicationModule struct {

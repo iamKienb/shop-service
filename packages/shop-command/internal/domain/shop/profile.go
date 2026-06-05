@@ -1,8 +1,8 @@
 package shop
 
 import (
+	"shop-command-module/internal/domain/shared"
 	"time"
-	"user-command-module/internal/domain/shared"
 )
 
 type Profile struct {

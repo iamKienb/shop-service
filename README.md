@@ -1,1 +1,1 @@
-# user-service
+# shop-service

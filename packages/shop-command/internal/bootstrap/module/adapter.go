@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"user-command-module/internal/adapter/shop"
+	"shop-command-module/internal/adapter/shop"
 
 	"connectrpc.com/connect"
 	"connectrpc.com/grpcreflect"

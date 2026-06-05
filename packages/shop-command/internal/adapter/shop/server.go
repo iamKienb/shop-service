@@ -2,10 +2,10 @@ package shop
 
 import (
 	"context"
-	"user-command-module/internal/application/commands/add_shop_address"
-	"user-command-module/internal/application/commands/assign_member"
-	"user-command-module/internal/application/commands/create_shop"
-	"user-command-module/internal/application/queries/check_permission"
+	"shop-command-module/internal/application/commands/add_shop_address"
+	"shop-command-module/internal/application/commands/assign_member"
+	"shop-command-module/internal/application/commands/create_shop"
+	"shop-command-module/internal/application/queries/check_permission"
 
 	"connectrpc.com/connect"
 	"github.com/iamKienb/api-contract/gen/shop"
