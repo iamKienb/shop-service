@@ -1,8 +1,0 @@
-go 1.25.8
-
-use (
-	./packages/shop-command
-	./packages/shop-shared
-	./packages/shop-query
-	./packages/shop-worker
-)
