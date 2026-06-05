@@ -3,11 +3,11 @@ package shop
 import (
 	"context"
 
-	"shop-query-module/internal/application/port"
 	"shop-query-module/internal/application/queries/get_shop_detail"
 	"shop-query-module/internal/application/queries/list_shop_addresses"
 	"shop-query-module/internal/application/queries/list_shop_members"
 	"shop-query-module/internal/application/queries/search_shops"
+	"shop-query-module/internal/application/service/models"
 
 	"connectrpc.com/connect"
 	api "github.com/iamKienb/api-contract/gen/shop"
@@ -42,7 +42,7 @@ func (s *queryServer) SearchShops(ctx context.Context, req *connect.Request[api.
 	result, err := s.searchShopsExecutor.Execute(ctx, search_shops.Query{
 		Keyword: req.Msg.GetKeyword(),
 		Status:  req.Msg.GetStatus(),
-		Page:    port.Page{Size: int(req.Msg.GetPageSize()), Token: req.Msg.GetPageToken()},
+		Page:    models.Page{Size: int(req.Msg.GetPageSize()), Token: req.Msg.GetPageToken()},
 	})
 	if err != nil {
 		return nil, err

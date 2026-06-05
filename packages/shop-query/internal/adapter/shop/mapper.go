@@ -1,12 +1,12 @@
 package shop
 
 import (
-	"shop-query-module/internal/application/port"
+	"shop-query-module/internal/application/service/models"
 
 	api "github.com/iamKienb/api-contract/gen/shop"
 )
 
-func ToShopView(shop *port.Shop) *api.ShopView {
+func ToShopView(shop *models.Shop) *api.ShopView {
 	if shop == nil {
 		return nil
 	}
@@ -21,7 +21,7 @@ func ToShopView(shop *port.Shop) *api.ShopView {
 	}
 }
 
-func ToShopViews(shops []port.Shop) []*api.ShopView {
+func ToShopViews(shops []models.Shop) []*api.ShopView {
 	views := make([]*api.ShopView, 0, len(shops))
 	for i := range shops {
 		views = append(views, ToShopView(&shops[i]))
@@ -29,7 +29,7 @@ func ToShopViews(shops []port.Shop) []*api.ShopView {
 	return views
 }
 
-func ToShopProfileView(profile *port.ShopProfile) *api.ShopProfileView {
+func ToShopProfileView(profile *models.ShopProfile) *api.ShopProfileView {
 	if profile == nil {
 		return nil
 	}
@@ -40,7 +40,7 @@ func ToShopProfileView(profile *port.ShopProfile) *api.ShopProfileView {
 	}
 }
 
-func ToShopAddressViews(addresses []port.ShopAddress) []*api.ShopAddressView {
+func ToShopAddressViews(addresses []models.ShopAddress) []*api.ShopAddressView {
 	views := make([]*api.ShopAddressView, 0, len(addresses))
 	for _, address := range addresses {
 		views = append(views, &api.ShopAddressView{
@@ -56,7 +56,7 @@ func ToShopAddressViews(addresses []port.ShopAddress) []*api.ShopAddressView {
 	return views
 }
 
-func ToShopMemberViews(members []port.ShopMember) []*api.ShopMemberView {
+func ToShopMemberViews(members []models.ShopMember) []*api.ShopMemberView {
 	views := make([]*api.ShopMemberView, 0, len(members))
 	for _, member := range members {
 		views = append(views, &api.ShopMemberView{

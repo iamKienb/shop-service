@@ -3,15 +3,15 @@ package search_shops
 import (
 	"context"
 
-	"shop-query-module/internal/application/port"
+	"shop-query-module/internal/application/service/models"
 )
 
 type Query struct {
 	Keyword string
 	Status  string
-	Page    port.Page
+	Page    models.Page
 }
-type Result = port.ShopPage
+type Result = models.ShopPage
 
 type Executor interface {
 	Execute(context.Context, Query) (*Result, error)
