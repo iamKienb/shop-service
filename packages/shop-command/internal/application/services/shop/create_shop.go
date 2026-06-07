@@ -79,7 +79,7 @@ func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (
 	bgCtx := context.WithoutCancel(ctx)
 	go func() {
 		_ = s.shopCache.SetIdemKey(bgCtx, cmd.User.ID, shared.IdemKeyTTL)
-		_ = s.shopCache.AddSlugToBloomFilter(bgCtx, cmd.Slug)
+		_ = s.shopCache.RememberSlug(bgCtx, cmd.Slug)
 	}()
 
 	return &create_shop.Result{
@@ -125,12 +125,15 @@ func (s *shopService) checkIdempotency(ctx context.Context, userID domain_shared
 }
 
 func (s *shopService) checkSlugAvailable(ctx context.Context, slug string) error {
-	exists, err := s.shopCache.GetSlugFromBloomFilter(ctx, slug)
-	if err != nil {
-		return err
-	}
+	if isKnown, err := s.shopCache.IsSlugKnown(ctx, slug); err == nil && isKnown {
+		isDuplicateSlug, err := s.shopRepo.CheckSlugExists(ctx, slug)
+		if err != nil {
+			return err
+		}
+		if isDuplicateSlug {
+			return shop.ErrShopSlugTaken
+		}
 
-	if exists == 0 {
 		return nil
 	}
 
