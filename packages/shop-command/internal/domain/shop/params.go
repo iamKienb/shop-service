@@ -6,16 +6,13 @@ type NewShopAddressParams struct {
 	UserID shared.UserID
 	ShopID shared.ShopID
 
-	CountryID   int
+	CountryID   string
 	CountryName string
 
-	CityID   int
-	CityName string
+	ProvinceID   string
+	ProvinceName string
 
-	DistrictID   int
-	DistrictName string
-
-	WardID   int
+	WardID   string
 	WardName string
 
 	Type        AddressTypeEnum

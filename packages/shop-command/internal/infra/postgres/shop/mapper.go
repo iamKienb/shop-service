@@ -40,20 +40,22 @@ func toInfraProfile(profile *domain_shop.Profile) repository.CreateShopProfilePa
 
 func toInfraShopAddress(address *domain_shop.ShopAddress) repository.CreateShopAddressParams {
 	return repository.CreateShopAddressParams{
-		ID:          conv.UUID(address.ID),
-		ShopID:      conv.UUID(address.ShopID),
-		CountryID:   int32(address.CountryID),
-		CityID:      int32(address.CityID),
-		DistrictID:  int32(address.DistrictID),
-		WardID:      int32(address.WardID),
-		AddressLine: address.AddressLine,
-		ContactName: address.ContactName,
-		PhoneNumber: address.PhoneNumber,
-		Type:        string(address.Type),
-		CreatedAt:   conv.TimeStampZ(&address.CreatedAt),
-		UpdatedAt:   conv.TimeStampZ(address.UpdatedAt),
-		CreatedBy:   conv.UUID(address.CreatedBy),
-		UpdatedBy:   nullableUUID(address.UpdatedBy),
+		ID:           conv.UUID(address.ID),
+		ShopID:       conv.UUID(address.ShopID),
+		CountryID:    address.CountryID,
+		CountryName:  address.CountryName,
+		ProvinceID:   address.ProvinceID,
+		ProvinceName: address.ProvinceName,
+		WardID:       address.WardID,
+		WardName:     address.WardName,
+		AddressLine:  address.AddressLine,
+		ContactName:  address.ContactName,
+		PhoneNumber:  address.PhoneNumber,
+		Type:         string(address.Type),
+		CreatedAt:    conv.TimeStampZ(&address.CreatedAt),
+		UpdatedAt:    conv.TimeStampZ(address.UpdatedAt),
+		CreatedBy:    conv.UUID(address.CreatedBy),
+		UpdatedBy:    nullableUUID(address.UpdatedBy),
 	}
 }
 
@@ -93,20 +95,22 @@ func toDomainShop(model repository.Shop, profile repository.ShopProfile, address
 
 	for _, address := range addresses {
 		shop.Addresses = append(shop.Addresses, domain_shop.ShopAddress{
-			ID:          shared.ShopAddressID(address.ID.Bytes),
-			ShopID:      shared.ShopID(address.ShopID.Bytes),
-			CountryID:   int(address.CountryID),
-			CityID:      int(address.CityID),
-			DistrictID:  int(address.DistrictID),
-			WardID:      int(address.WardID),
-			ContactName: address.ContactName,
-			PhoneNumber: address.PhoneNumber,
-			AddressLine: address.AddressLine,
-			Type:        domain_shop.AddressTypeEnum(address.Type),
-			CreatedBy:   shared.UserID(address.CreatedBy.Bytes),
-			UpdatedBy:   toDomainUserID(address.UpdatedBy),
-			CreatedAt:   address.CreatedAt.Time,
-			UpdatedAt:   toTimePointer(address.UpdatedAt),
+			ID:           shared.ShopAddressID(address.ID.Bytes),
+			ShopID:       shared.ShopID(address.ShopID.Bytes),
+			CountryID:    address.CountryID,
+			CountryName:  address.CountryName,
+			ProvinceID:   address.ProvinceID,
+			ProvinceName: address.ProvinceName,
+			WardID:       address.WardID,
+			WardName:     address.WardName,
+			ContactName:  address.ContactName,
+			PhoneNumber:  address.PhoneNumber,
+			AddressLine:  address.AddressLine,
+			Type:         domain_shop.AddressTypeEnum(address.Type),
+			CreatedBy:    shared.UserID(address.CreatedBy.Bytes),
+			UpdatedBy:    toDomainUserID(address.UpdatedBy),
+			CreatedAt:    address.CreatedAt.Time,
+			UpdatedAt:    toTimePointer(address.UpdatedAt),
 		})
 	}
 

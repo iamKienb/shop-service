@@ -43,9 +43,11 @@ INSERT INTO shop_addresses (
     shop_id, 
 
     country_id,
-    city_id,
-    district_id, 
+    country_name,
+    province_id,
+    province_name,
     ward_id,
+    ward_name,
 
     address_line,
     contact_name,
@@ -62,39 +64,43 @@ VALUES (
     $1::uuid,
     $2::uuid,
 
-    $3::int,
-    $4::int,
-    $5::int,
-    $6::int,
-
+    $3::text,
+    $4::text,
+    $5::text,
+    $6::text,
     $7::text,
     $8::text,
+
     $9::text,
     $10::text,
+    $11::text,
+    $12::text,
 
-    $11::TIMESTAMPTZ,
-    $12::TIMESTAMPTZ,
+    $13::TIMESTAMPTZ,
+    $14::TIMESTAMPTZ,
 
-    $13::uuid,
-    $14::uuid
+    $15::uuid,
+    $16::uuid
 )
 `
 
 type CreateShopAddressParams struct {
-	ID          pgtype.UUID
-	ShopID      pgtype.UUID
-	CountryID   int32
-	CityID      int32
-	DistrictID  int32
-	WardID      int32
-	AddressLine string
-	ContactName string
-	PhoneNumber string
-	Type        string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	CreatedBy   pgtype.UUID
-	UpdatedBy   pgtype.UUID
+	ID           pgtype.UUID
+	ShopID       pgtype.UUID
+	CountryID    string
+	CountryName  string
+	ProvinceID   string
+	ProvinceName string
+	WardID       string
+	WardName     string
+	AddressLine  string
+	ContactName  string
+	PhoneNumber  string
+	Type         string
+	CreatedAt    pgtype.Timestamptz
+	UpdatedAt    pgtype.Timestamptz
+	CreatedBy    pgtype.UUID
+	UpdatedBy    pgtype.UUID
 }
 
 func (q *Queries) CreateShopAddress(ctx context.Context, arg CreateShopAddressParams) error {
@@ -102,9 +108,11 @@ func (q *Queries) CreateShopAddress(ctx context.Context, arg CreateShopAddressPa
 		arg.ID,
 		arg.ShopID,
 		arg.CountryID,
-		arg.CityID,
-		arg.DistrictID,
+		arg.CountryName,
+		arg.ProvinceID,
+		arg.ProvinceName,
 		arg.WardID,
+		arg.WardName,
 		arg.AddressLine,
 		arg.ContactName,
 		arg.PhoneNumber,
@@ -122,9 +130,11 @@ SELECT
     id,
     shop_id,
     country_id,
-    city_id,
-    district_id,
+    country_name,
+    province_id,
+    province_name,
     ward_id,
+    ward_name,
     address_line,
     contact_name,
     phone_number,
@@ -151,9 +161,11 @@ func (q *Queries) ListShopAddressesByShopID(ctx context.Context, shopID pgtype.U
 			&i.ID,
 			&i.ShopID,
 			&i.CountryID,
-			&i.CityID,
-			&i.DistrictID,
+			&i.CountryName,
+			&i.ProvinceID,
+			&i.ProvinceName,
 			&i.WardID,
+			&i.WardName,
 			&i.AddressLine,
 			&i.ContactName,
 			&i.PhoneNumber,

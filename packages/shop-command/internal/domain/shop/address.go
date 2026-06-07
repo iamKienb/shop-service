@@ -16,10 +16,14 @@ type ShopAddress struct {
 	ID     shared.ShopAddressID
 	ShopID shared.ShopID
 
-	CountryID  int
-	CityID     int
-	DistrictID int
-	WardID     int
+	CountryID   string
+	CountryName string
+
+	ProvinceID   string
+	ProvinceName string
+
+	WardID   string
+	WardName string
 
 	ContactName string
 	PhoneNumber string

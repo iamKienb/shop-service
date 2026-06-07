@@ -1,6 +1,8 @@
 package shop
 
 import (
+	"strconv"
+
 	"shop-command-module/internal/application/commands/add_shop_address"
 	"shop-command-module/internal/application/commands/assign_member"
 	"shop-command-module/internal/application/commands/create_shop"
@@ -107,8 +109,7 @@ func ToAddAddressCommand(userID string, req *shop.AddShopAddressRequest) (add_sh
 		ShopID: parsedShopID,
 
 		Country:  toShopLocationInfo(req.GetCountry()),
-		City:     toShopLocationInfo(req.GetCity()),
-		District: toShopLocationInfo(req.GetDistrict()),
+		Province: toShopLocationInfo(req.GetProvince()),
 		Ward:     toShopLocationInfo(req.GetWard()),
 
 		AddressLine: req.GetAddressLine(),
@@ -161,7 +162,7 @@ func toShopLocationInfo(src shopLocationSource) add_shop_address.LocationInfo {
 	}
 
 	return add_shop_address.LocationInfo{
-		ID:   int(src.GetId()),
+		ID:   strconv.FormatInt(src.GetId(), 10),
 		Name: src.GetName(),
 	}
 }

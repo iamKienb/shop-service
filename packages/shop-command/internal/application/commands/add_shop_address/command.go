@@ -6,7 +6,7 @@ import (
 )
 
 type LocationInfo struct {
-	ID   int
+	ID   string
 	Name string
 }
 
@@ -15,8 +15,7 @@ type Command struct {
 	UserID shared.UserID
 
 	Country  LocationInfo
-	City     LocationInfo
-	District LocationInfo
+	Province LocationInfo
 	Ward     LocationInfo
 
 	AddressLine string

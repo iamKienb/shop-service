@@ -34,13 +34,12 @@ func (s *shopService) AddAddress(ctx context.Context, cmd add_shop_address.Comma
 
 		CountryID:   cmd.Country.ID,
 		CountryName: cmd.Country.Name,
-		CityID:      cmd.City.ID,
-		CityName:    cmd.City.Name,
 
-		DistrictID:   cmd.District.ID,
-		DistrictName: cmd.District.Name,
-		WardID:       cmd.Ward.ID,
-		WardName:     cmd.Ward.Name,
+		ProvinceID:   cmd.Province.ID,
+		ProvinceName: cmd.Province.Name,
+
+		WardID:   cmd.Ward.ID,
+		WardName: cmd.Ward.Name,
 
 		AddressLine: cmd.AddressLine,
 		ContactName: cmd.ContactName,

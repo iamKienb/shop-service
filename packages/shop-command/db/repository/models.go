@@ -33,20 +33,22 @@ type Shop struct {
 }
 
 type ShopAddress struct {
-	ID          pgtype.UUID
-	ShopID      pgtype.UUID
-	CountryID   int32
-	CityID      int32
-	DistrictID  int32
-	WardID      int32
-	AddressLine string
-	ContactName string
-	PhoneNumber string
-	Type        string
-	CreatedBy   pgtype.UUID
-	UpdatedBy   pgtype.UUID
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
+	ID           pgtype.UUID
+	ShopID       pgtype.UUID
+	CountryID    string
+	CountryName  string
+	ProvinceID   string
+	ProvinceName string
+	WardID       string
+	WardName     string
+	AddressLine  string
+	ContactName  string
+	PhoneNumber  string
+	Type         string
+	CreatedBy    pgtype.UUID
+	UpdatedBy    pgtype.UUID
+	CreatedAt    pgtype.Timestamptz
+	UpdatedAt    pgtype.Timestamptz
 }
 
 type ShopMember struct {

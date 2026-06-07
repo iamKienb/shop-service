@@ -121,21 +121,9 @@
                             }
                         }
                     },
-                    "city": {
+                    "province": {
                         "properties": {
-                            "city_id": {
-                                "type": "keyword",
-                                "normalizer": "standard_normalizer"
-                            },
-                            "name": {
-                                "type": "text",
-                                "analyzer": "standard_ascii"
-                            }
-                        }
-                    },
-                    "district": {
-                        "properties": {
-                            "district_id": {
+                            "province_id": {
                                 "type": "keyword",
                                 "normalizer": "standard_normalizer"
                             },

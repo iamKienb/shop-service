@@ -111,10 +111,14 @@ func (s *Shop) AddAddress(params NewShopAddressParams) (*ShopAddress, error) {
 		ID:     addressID,
 		ShopID: params.ShopID,
 
-		CountryID:  params.CountryID,
-		CityID:     params.CityID,
-		DistrictID: params.DistrictID,
-		WardID:     params.WardID,
+		CountryID:   params.CountryID,
+		CountryName: params.CountryName,
+
+		ProvinceID:   params.ProvinceID,
+		ProvinceName: params.ProvinceName,
+
+		WardID:   params.WardID,
+		WardName: params.WardName,
 
 		Type:        params.Type,
 		ContactName: params.ContactName,
@@ -139,11 +143,8 @@ func (s *Shop) AddAddress(params NewShopAddressParams) (*ShopAddress, error) {
 		CountryID:   params.CountryID,
 		CountryName: params.CountryName,
 
-		CityID:   params.CityID,
-		CityName: params.CityName,
-
-		DistrictID:   params.DistrictID,
-		DistrictName: params.DistrictName,
+		ProvinceID:   params.ProvinceID,
+		ProvinceName: params.ProvinceName,
 
 		WardID:   params.WardID,
 		WardName: params.WardName,

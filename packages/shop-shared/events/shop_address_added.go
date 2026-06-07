@@ -8,16 +8,13 @@ type ShopAddressAdded struct {
 	ShopID        string `json:"shop_id"`
 	ShopAddressID string `json:"shop_address_id"`
 
-	CountryID   int    `json:"country_id"`
+	CountryID   string `json:"country_id"`
 	CountryName string `json:"country_name"`
 
-	CityID   int    `json:"city_id"`
-	CityName string `json:"city_name"`
+	ProvinceID   string `json:"province_id"`
+	ProvinceName string `json:"province_name"`
 
-	DistrictID   int    `json:"district_id"`
-	DistrictName string `json:"district_name"`
-
-	WardID   int    `json:"ward_id"`
+	WardID   string `json:"ward_id"`
 	WardName string `json:"ward_name"`
 
 	AddressLine  string `json:"address_line"`
