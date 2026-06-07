@@ -8,26 +8,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type City struct {
-	ID        int32
-	CountryID pgtype.Int4
-	Name      string
-	Type      pgtype.Text
-}
-
-type Country struct {
-	ID   int32
-	Name string
-	Code pgtype.Text
-}
-
-type District struct {
-	ID     int32
-	CityID pgtype.Int4
-	Name   string
-	Type   pgtype.Text
-}
-
 type Outbox struct {
 	ID             pgtype.UUID
 	AggregateID    pgtype.UUID
@@ -98,11 +78,4 @@ type ShopRole struct {
 	ID   int32
 	Code string
 	Name string
-}
-
-type Ward struct {
-	ID         int32
-	DistrictID pgtype.Int4
-	Name       string
-	Type       pgtype.Text
 }

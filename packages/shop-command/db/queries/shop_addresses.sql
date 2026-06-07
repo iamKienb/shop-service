@@ -4,13 +4,9 @@ INSERT INTO shop_addresses (
     shop_id, 
 
     country_id,
-    country_name,
-
-    province_id,
-    province_name,
-
+    city_id,
+    district_id, 
     ward_id,
-    ward_name,
 
     address_line,
     contact_name,
@@ -27,26 +23,43 @@ VALUES (
     @id::uuid,
     @shop_id::uuid,
 
-    @country_id::text,
-    @country_name::text,
+    @country_id::int,
+    @city_id::int,
+    @district_id::int,
+    @ward_id::int,
 
-    @province_id::text,
-    @province_name::text,
+    @address_line::text,
+    @contact_name::text,
+    @phone_number::text,
+    @type::text,
 
-    @ward_id::text,
-    @ward_name::text,
+    @created_at::TIMESTAMPTZ,
+    @updated_at::TIMESTAMPTZ,
 
-    address_line::text,
-    contact_name::text,
-    phone_number::text,
-    type::text,
-
-    created_at::TIMESTAMPTZ,
-    updated_at::TIMESTAMPTZ,
-
-    created_by::uuid,
-    updated_by::uuid
+    @created_by::uuid,
+    @updated_by::uuid
 );
+
+
+-- name: ListShopAddressesByShopID :many
+SELECT
+    id,
+    shop_id,
+    country_id,
+    city_id,
+    district_id,
+    ward_id,
+    address_line,
+    contact_name,
+    phone_number,
+    type,
+    created_by,
+    updated_by,
+    created_at,
+    updated_at
+FROM shop_addresses
+WHERE shop_id = $1
+ORDER BY created_at ASC;
 
 
 -- name: CheckRequiredAddresses :one

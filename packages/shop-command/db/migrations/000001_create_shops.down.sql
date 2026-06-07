@@ -1,1 +1,2 @@
+DROP TABLE IF EXISTS shop_profiles;
 DROP TABLE IF EXISTS shops;

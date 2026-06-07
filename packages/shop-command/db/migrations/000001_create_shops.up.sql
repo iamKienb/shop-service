@@ -22,8 +22,8 @@ CREATE TABLE shop_profiles (
     logo_url TEXT,
     banner_url TEXT,
 
-    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_by UUID NOT NULL,
+    updated_by UUID,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT NULL

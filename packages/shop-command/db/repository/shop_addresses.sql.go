@@ -58,7 +58,26 @@ INSERT INTO shop_addresses (
     created_by,
     updated_by
 )
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+VALUES (
+    $1::uuid,
+    $2::uuid,
+
+    $3::int,
+    $4::int,
+    $5::int,
+    $6::int,
+
+    $7::text,
+    $8::text,
+    $9::text,
+    $10::text,
+
+    $11::TIMESTAMPTZ,
+    $12::TIMESTAMPTZ,
+
+    $13::uuid,
+    $14::uuid
+)
 `
 
 type CreateShopAddressParams struct {
