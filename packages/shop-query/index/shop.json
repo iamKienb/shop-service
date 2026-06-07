@@ -62,30 +62,32 @@
                 "type": "date"
             },
             "profile": {
-                "shop_id": {
-                    "type": "keyword"
-                },
-                "description": {
-                    "type": "text",
-                    "analyzer": "standard_ascii"
-                },
-                "logo_url": {
-                    "type": "keyword"
-                },
-                "banner_url": {
-                    "type": "keyword"
-                },
-                "created_by": {
-                    "type": "keyword"
-                },
-                "updated_by": {
-                    "type": "keyword"
-                },
-                "created_at": {
-                    "type": "date"
-                },
-                "updated_at": {
-                    "type": "date"
+                "properties": {
+                    "shop_id": {
+                        "type": "keyword"
+                    },
+                    "description": {
+                        "type": "text",
+                        "analyzer": "standard_ascii"
+                    },
+                    "logo_url": {
+                        "type": "keyword"
+                    },
+                    "banner_url": {
+                        "type": "keyword"
+                    },
+                    "created_by": {
+                        "type": "keyword"
+                    },
+                    "updated_by": {
+                        "type": "keyword"
+                    },
+                    "created_at": {
+                        "type": "date"
+                    },
+                    "updated_at": {
+                        "type": "date"
+                    }
                 }
             },
             "address": {
@@ -195,6 +197,9 @@
                     "member_name": {
                         "type": "text",
                         "analyzer": "standard_ascii"
+                    },
+                    "role_ids": {
+                        "type": "integer"
                     },
                     "added_by": {
                         "type": "keyword"

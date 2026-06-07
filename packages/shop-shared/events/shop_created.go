@@ -2,7 +2,7 @@ package events
 
 import "time"
 
-const TopicShopCreated = "user-service.shop.created"
+const TopicShopCreated = "shop-service.shop.created"
 
 type ShopCreated struct {
 	ShopID  string `json:"shop_id"`

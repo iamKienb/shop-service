@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"shop-shared-module/events"
 	"shop-worker-module/internal/application/port"
+	"strings"
 )
 
 type ShopAddressAddedHandler struct {
@@ -22,7 +23,12 @@ func (h *ShopAddressAddedHandler) Handle(ctx context.Context, raw json.RawMessag
 		return err
 	}
 
-	fullAddress := payload.AddressLine + payload.WardName + payload.ProvinceName
+	fullAddress := strings.Join([]string{
+		payload.AddressLine,
+		payload.WardName,
+		payload.ProvinceName,
+		payload.CountryName,
+	}, ", ")
 
 	doc := map[string]any{
 		"address": map[string]any{

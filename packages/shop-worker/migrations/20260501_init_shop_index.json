@@ -191,16 +191,32 @@
             "members": {
                 "type": "nested",
                 "properties": {
-                    "user_id": {
+                    "member_id": {
                         "type": "keyword"
                     },
-                    "full_name": {
+                    "member_name": {
                         "type": "text",
                         "analyzer": "standard_ascii"
+                    },
+                    "role_ids": {
+                        "type": "integer"
+                    },
+                    "added_by": {
+                        "type": "keyword"
+                    },
+                    "name_added_by": {
+                        "type": "text",
+                        "analyzer": "standard_ascii"
+                    },
+                    "joined_at": {
+                        "type": "date"
                     },
                     "roles": {
                         "type": "nested",
                         "properties": {
+                            "id": {
+                                "type": "keyword"
+                            },
                             "code": {
                                 "type": "keyword",
                                 "normalizer": "standard_normalizer"
@@ -210,18 +226,6 @@
                                 "analyzer": "standard_ascii"
                             }
                         }
-                    },
-                    "added_by": {
-                        "type": "keyword"
-                    },
-                    "updated_by": {
-                        "type": "keyword"
-                    },
-                    "created_at": {
-                        "type": "date"
-                    },
-                    "updated_at": {
-                        "type": "date"
                     }
                 }
             }
