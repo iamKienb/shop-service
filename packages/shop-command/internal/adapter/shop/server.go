@@ -44,7 +44,7 @@ func (s *shopServer) CreateShop(ctx context.Context, req *connect.Request[shop.C
 
 	result, err := s.createShopExecutor.Execute(ctx, cmd)
 	if err != nil {
-		return nil, err
+		return nil, mapError(err)
 	}
 
 	return connect.NewResponse(ToCreateShopResponse(result)), nil
@@ -59,7 +59,7 @@ func (s *shopServer) AddShopAddress(ctx context.Context, req *connect.Request[sh
 
 	result, err := s.addAddressExecutor.Execute(ctx, cmd)
 	if err != nil {
-		return nil, err
+		return nil, mapError(err)
 	}
 
 	return connect.NewResponse(ToAddAddressResponse(result)), nil
@@ -74,22 +74,21 @@ func (s *shopServer) AssignMemberRoles(ctx context.Context, req *connect.Request
 
 	result, err := s.assignMemberExecutor.Execute(ctx, cmd)
 	if err != nil {
-		return nil, err
+		return nil, mapError(err)
 	}
 
 	return connect.NewResponse(ToAssignMemberResponse(result)), nil
 }
 
 func (s *shopServer) CheckPermission(ctx context.Context, req *connect.Request[shop.CheckPermissionRequest]) (*connect.Response[shop.CheckPermissionResponse], error) {
-	currentUser := authx.GetUserInfoFromCtx(ctx)
-	cmd, err := ToCheckPermissionQuery(currentUser.UserID, req.Msg)
+	cmd, err := ToCheckPermissionQuery(req.Msg)
 	if err != nil {
 		return nil, err
 	}
 
 	result, err := s.checkPermissionExecutor.Execute(ctx, cmd)
 	if err != nil {
-		return nil, err
+		return nil, mapError(err)
 	}
 
 	return connect.NewResponse(ToCheckPermissionResponse(result)), nil

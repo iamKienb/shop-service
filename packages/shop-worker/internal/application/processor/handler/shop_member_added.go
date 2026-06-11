@@ -28,18 +28,22 @@ func (h *ShopMemberAddedHandler) Handle(ctx context.Context, raw json.RawMessage
 	}
 
 	doc := map[string]any{
-		"members": map[string]any{
-			"member_id":   payload.MemberID,
-			"member_name": payload.MemberName,
-			"role_ids":    roleIDs,
+		"id":       payload.MemberID,
+		"name":     payload.MemberName,
+		"role_ids": roleIDs,
 
-			"added_by":      payload.AddedBy,
-			"name_added_by": payload.NameAddedBy,
+		"added_by":      payload.AddedBy,
+		"name_added_by": payload.NameAddedBy,
 
-			"joined_at": payload.JoinedAt,
-			"roles":     payload.Roles,
-		},
+		"joined_at": payload.JoinedAt,
+		"roles":     payload.Roles,
 	}
 
-	return h.repo.SyncData(ctx, h.alias, payload.ShopID, doc)
+	return h.repo.SyncNestedData(ctx, port.NestedParam{
+		Index:         h.alias,
+		DocID:         payload.ShopID,
+		NestedField:   "members",
+		NestedFieldID: payload.MemberID,
+		Data:          doc,
+	})
 }

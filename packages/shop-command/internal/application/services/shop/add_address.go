@@ -12,20 +12,20 @@ import (
 
 func (s *shopService) AddAddress(ctx context.Context, cmd add_shop_address.Command) (*add_shop_address.Result, error) {
 	if err := s.authorize(ctx, cmd.ShopID, cmd.UserID, member.ActionShopManageAddress); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	currentShop, err := s.shopRepo.FindByID(ctx, cmd.ShopID)
 	if err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 	if currentShop == nil {
-		return nil, s.wrapError(shop.ErrShopNotFound)
+		return nil, shop.ErrShopNotFound
 	}
 
 	addressType := shared.ValidateEnum[shop.AddressTypeEnum](cmd.Type)
 	if addressType == nil {
-		return nil, s.wrapError(shop.ErrAddressTypeInvalid)
+		return nil, shop.ErrAddressTypeInvalid
 	}
 
 	newAddress, err := currentShop.AddAddress(shop.NewShopAddressParams{
@@ -47,7 +47,7 @@ func (s *shopService) AddAddress(ctx context.Context, cmd add_shop_address.Comma
 		Type:        *addressType,
 	})
 	if err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	var outboxParams []port.OutboxParam
@@ -76,7 +76,7 @@ func (s *shopService) AddAddress(ctx context.Context, cmd add_shop_address.Comma
 
 		return nil
 	}); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	return &add_shop_address.Result{

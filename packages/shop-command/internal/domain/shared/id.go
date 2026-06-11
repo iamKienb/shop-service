@@ -4,8 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type AddressID int
-type RoleID int
+type RoleID int32
 
 type UserID uuid.UUID
 type UserAddressID uuid.UUID

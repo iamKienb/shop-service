@@ -70,22 +70,16 @@ func NewShop(params NewShopParams) *Shop {
 	}
 
 	shop.AddEvent(ShopCreatedEvent{
-		ShopID:    shopID,
-		OwnerID:   shop.OwnerID,
-		Name:      shop.Name,
-		Slug:      shop.Slug,
-		Status:    shop.Status,
-		CreatedBy: shop.CreatedBy,
-		CreatedAt: now,
-	})
-
-	shop.AddEvent(ShopProfileCreatedEvent{
 		ShopID:      shopID,
+		OwnerID:     shop.OwnerID,
+		Name:        shop.Name,
+		Slug:        shop.Slug,
+		Status:      shop.Status,
 		Description: profile.Description,
 		LogoUrl:     profile.LogoUrl,
 		BannerUrl:   profile.BannerUrl,
-		CreatedBy:   profile.CreatedBy,
-		CreatedAt:   now,
+		CreatedBy:   shop.CreatedBy,
+		CreatedAt:   shop.CreatedAt,
 	})
 
 	return shop

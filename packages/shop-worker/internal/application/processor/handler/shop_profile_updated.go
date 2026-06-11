@@ -7,17 +7,17 @@ import (
 	"shop-worker-module/internal/application/port"
 )
 
-type ShopProfileCreatedHandler struct {
+type ShopProfileUpdatedHandler struct {
 	repo  port.ESRepository
 	alias string
 }
 
-func NewShopProfileCreatedHandler(repo port.ESRepository, alias string) *ShopProfileCreatedHandler {
-	return &ShopProfileCreatedHandler{repo: repo, alias: alias}
+func NewShopProfileUpdatedHandler(repo port.ESRepository, alias string) *ShopProfileUpdatedHandler {
+	return &ShopProfileUpdatedHandler{repo: repo, alias: alias}
 }
 
-func (h *ShopProfileCreatedHandler) Handle(ctx context.Context, raw json.RawMessage) error {
-	var payload events.ShopProfileCreated
+func (h *ShopProfileUpdatedHandler) Handle(ctx context.Context, raw json.RawMessage) error {
+	var payload events.ShopProfileUpdated
 	if err := json.Unmarshal(raw, &payload); err != nil {
 		return err
 	}

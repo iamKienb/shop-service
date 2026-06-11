@@ -14,11 +14,11 @@ import (
 
 func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (*create_shop.Result, error) {
 	if err := s.checkSlugAvailable(ctx, cmd.Slug); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	if err := s.checkIdempotency(ctx, cmd.User.ID); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	newShop := shop.NewShop(shop.NewShopParams{
@@ -73,7 +73,7 @@ func (s *shopService) CreateShop(ctx context.Context, cmd create_shop.Command) (
 
 		return nil
 	}); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	bgCtx := context.WithoutCancel(ctx)

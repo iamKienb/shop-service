@@ -2,7 +2,7 @@ package events
 
 var Topics = []string{
 	TopicShopCreated,
-	TopicShopProfileCreated,
+	TopicShopProfileUpdated,
 	TopicShopAddressAdded,
 	TopicShopMemberAdded,
 }

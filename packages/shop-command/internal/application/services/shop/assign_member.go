@@ -10,7 +10,7 @@ import (
 
 func (s *shopService) AssignMember(ctx context.Context, cmd assign_member.Command) (*assign_member.Result, error) {
 	if err := s.authorize(ctx, cmd.ShopID, cmd.User.ID, cmd.Action); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	newMembers := make([]*member.Member, 0, len(cmd.MemberRoles))
@@ -61,7 +61,7 @@ func (s *shopService) AssignMember(ctx context.Context, cmd assign_member.Comman
 
 		return nil
 	}); err != nil {
-		return nil, s.wrapError(err)
+		return nil, err
 	}
 
 	return &assign_member.Result{

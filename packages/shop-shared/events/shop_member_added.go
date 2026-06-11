@@ -5,7 +5,7 @@ import "time"
 const TopicShopMemberAdded = "shop-service.shop.member.added"
 
 type Role struct {
-	ID   int    `json:"id"`
+	ID   int32  `json:"id"`
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
@@ -17,5 +17,5 @@ type ShopMemberAdded struct {
 	JoinedAt    time.Time `json:"joined_at"`
 	AddedBy     string    `json:"added_by"`
 	NameAddedBy string    `json:"name_added_by"`
-	Roles       []Role    `json:"role"`
+	Roles       []Role    `json:"roles"`
 }

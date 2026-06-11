@@ -28,6 +28,7 @@ func (h *ShopCreatedHandler) Handle(ctx context.Context, raw json.RawMessage) er
 		"name":       payload.Name,
 		"slug":       payload.Slug,
 		"status":     payload.Status,
+		"profile":    payload.Profile,
 		"created_by": payload.CreatedBy,
 		"created_at": payload.CreatedAt,
 	}

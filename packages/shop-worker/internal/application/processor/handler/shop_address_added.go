@@ -31,32 +31,37 @@ func (h *ShopAddressAddedHandler) Handle(ctx context.Context, raw json.RawMessag
 	}, ", ")
 
 	doc := map[string]any{
-		"address": map[string]any{
-			"id":      payload.ShopAddressID,
-			"shop_id": payload.ShopID,
+		"id":      payload.ShopAddressID,
+		"shop_id": payload.ShopID,
 
-			"full_address": fullAddress,
-			"country": map[string]any{
-				"country_id": payload.CountryID,
-				"name":       payload.CountryName,
-			},
-			"province": map[string]any{
-				"province_id": payload.ProvinceID,
-				"name":        payload.ProvinceName,
-			},
-			"ward": map[string]any{
-				"ward_id": payload.WardID,
-				"name":    payload.WardName,
-			},
-
-			"address_line": payload.AddressLine,
-			"contact_name": payload.ContractName,
-			"phone_number": payload.PhoneNumber,
-			"type":         payload.Type,
-			"created_by":   payload.CreatedBy,
-			"created_at":   payload.CreatedAt,
+		"country": map[string]any{
+			"id":   payload.CountryID,
+			"name": payload.CountryName,
 		},
+		"province": map[string]any{
+			"id":   payload.ProvinceID,
+			"name": payload.ProvinceName,
+		},
+		"ward": map[string]any{
+			"id":   payload.WardID,
+			"name": payload.WardName,
+		},
+
+		"address_line": payload.AddressLine,
+		"full_address": fullAddress,
+
+		"contact_name": payload.ContractName,
+		"phone_number": payload.PhoneNumber,
+		"type":         payload.Type,
+		"created_by":   payload.CreatedBy,
+		"created_at":   payload.CreatedAt,
 	}
 
-	return h.repo.SyncData(ctx, h.alias, payload.ShopID, doc)
+	return h.repo.SyncNestedData(ctx, port.NestedParam{
+		Index:         h.alias,
+		DocID:         payload.ShopID,
+		NestedField:   "addresses",
+		NestedFieldID: payload.ShopAddressID,
+		Data:          doc,
+	})
 }

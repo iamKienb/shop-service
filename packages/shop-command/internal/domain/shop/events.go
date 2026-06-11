@@ -6,13 +6,16 @@ import (
 )
 
 type ShopCreatedEvent struct {
-	ShopID    shared.ShopID
-	OwnerID   shared.UserID
-	Name      string
-	Slug      string
-	Status    ShopStatus
-	CreatedBy shared.UserID
-	CreatedAt time.Time
+	ShopID      shared.ShopID
+	OwnerID     shared.UserID
+	Name        string
+	Slug        string
+	Status      ShopStatus
+	Description *string
+	LogoUrl     *string
+	BannerUrl   *string
+	CreatedBy   shared.UserID
+	CreatedAt   time.Time
 }
 
 func (e ShopCreatedEvent) EventName() string {
@@ -21,17 +24,25 @@ func (e ShopCreatedEvent) EventName() string {
 
 func (e ShopCreatedEvent) IntegrationPayload() map[string]interface{} {
 	return map[string]interface{}{
-		"shop_id":    e.ShopID.String(),
-		"owner_id":   e.OwnerID.String(),
-		"name":       e.Name,
-		"slug":       e.Slug,
-		"status":     string(e.Status),
+		"shop_id":  e.ShopID.String(),
+		"owner_id": e.OwnerID.String(),
+		"name":     e.Name,
+		"slug":     e.Slug,
+		"status":   string(e.Status),
+		"profile": map[string]interface{}{
+			"shop_id":     e.ShopID.String(),
+			"description": valueOrNil(e.Description),
+			"logo_url":    valueOrNil(e.LogoUrl),
+			"banner_url":  valueOrNil(e.BannerUrl),
+			"created_by":  e.CreatedBy.String(),
+			"created_at":  e.CreatedAt,
+		},
 		"created_by": e.CreatedBy.String(),
 		"created_at": e.CreatedAt,
 	}
 }
 
-type ShopProfileCreatedEvent struct {
+type ShopProfileUpdateEvent struct {
 	ShopID      shared.ShopID
 	Description *string
 	LogoUrl     *string
@@ -40,11 +51,11 @@ type ShopProfileCreatedEvent struct {
 	CreatedAt   time.Time
 }
 
-func (e ShopProfileCreatedEvent) EventName() string {
+func (e ShopProfileUpdateEvent) EventName() string {
 	return "shop-service.shop.profile.created"
 }
 
-func (e ShopProfileCreatedEvent) IntegrationPayload() map[string]interface{} {
+func (e ShopProfileUpdateEvent) IntegrationPayload() map[string]interface{} {
 	return map[string]interface{}{
 		"shop_id":     e.ShopID.String(),
 		"description": valueOrNil(e.Description),

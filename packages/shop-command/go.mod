@@ -7,7 +7,7 @@ require (
 	connectrpc.com/grpcreflect v1.3.0
 	github.com/google/uuid v1.6.0
 	github.com/iamKienb/api-contract v0.2.15
-	github.com/iamKienb/go-core v0.4.7
+	github.com/iamKienb/go-core v1.3.0
 	github.com/jackc/pgx/v5 v5.9.1
 	golang.org/x/net v0.52.0
 )

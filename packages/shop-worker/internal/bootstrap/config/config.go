@@ -5,7 +5,9 @@ import (
 )
 
 type ShopWorkerConfig struct {
-	ES       configx.ElasticSearchConfig `envPrefix:"SHOP_WORKER_SERVICE"`
-	Kafka    configx.KafkaConfig         `envPrefix:"SHOP_WORKER_SERVICE"`
-	Consumer configx.ConsumerConfig      `envPrefix:"SHOP_WORKER_SERVICE"`
+	ES    configx.ElasticSearchConfig `envPrefix:"SHOP_WORKER_SERVICE"`
+	Redis configx.RedisConfig         `envPrefix:"SHOP_WORKER_SERVICE"`
+
+	Kafka    configx.KafkaConfig    `envPrefix:"SHOP_WORKER_SERVICE"`
+	Consumer configx.ConsumerConfig `envPrefix:"SHOP_WORKER_SERVICE"`
 }

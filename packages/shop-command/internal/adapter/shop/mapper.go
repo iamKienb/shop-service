@@ -2,6 +2,7 @@ package shop
 
 import (
 	"strconv"
+	"strings"
 
 	"shop-command-module/internal/application/commands/add_shop_address"
 	"shop-command-module/internal/application/commands/assign_member"
@@ -115,7 +116,7 @@ func ToAddAddressCommand(userID string, req *shop.AddShopAddressRequest) (add_sh
 		AddressLine: req.GetAddressLine(),
 		ContactName: req.GetContactName(),
 		PhoneNumber: req.GetPhoneNumber(),
-		Type:        req.GetType(),
+		Type:        strings.ToUpper(req.GetType()),
 	}, nil
 }
 
@@ -125,8 +126,8 @@ func ToAddAddressResponse(result *add_shop_address.Result) *shop.AddShopAddressR
 	}
 }
 
-func ToCheckPermissionQuery(userID string, req *shop.CheckPermissionRequest) (check_permission.Query, error) {
-	parsedUserID, err := shared.ParseToRawID[shared.UserID](userID)
+func ToCheckPermissionQuery(req *shop.CheckPermissionRequest) (check_permission.Query, error) {
+	parsedUserID, err := shared.ParseToRawID[shared.UserID](req.GetUserId())
 	if err != nil {
 		return check_permission.Query{}, app_error.New(app_error.KindValidation, "user_invalid", "invalid user id", err)
 	}

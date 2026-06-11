@@ -1,6 +1,6 @@
 package models
 
-import "encoding/json"
+import "time"
 
 type Page struct {
 	Size  int
@@ -9,69 +9,71 @@ type Page struct {
 
 type Shop struct {
 	ID        string        `json:"id"`
+	OwnerID   string        `json:"owner_id"`
 	Name      string        `json:"name"`
 	Slug      string        `json:"slug"`
 	Status    string        `json:"status"`
 	Profile   *ShopProfile  `json:"profile"`
-	Addresses []ShopAddress `json:"address"`
+	Addresses []ShopAddress `json:"addresses"`
 	Members   []ShopMember  `json:"members"`
-}
 
-func (s *Shop) UnmarshalJSON(data []byte) error {
-	type shopAlias Shop
-	var raw struct {
-		shopAlias
-		Address json.RawMessage `json:"address"`
-		Members json.RawMessage `json:"members"`
-	}
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*s = Shop(raw.shopAlias)
-	s.Addresses = decodeOneOrMany[ShopAddress](raw.Address)
-	s.Members = decodeOneOrMany[ShopMember](raw.Members)
-	return nil
+	CreatedBy string    `json:"created_by"`
+	CreatedAt time.Time `json:"created_at"`
+
+	UpdatedBy string    `json:"updated_by"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type ShopProfile struct {
 	Description string `json:"description"`
 	LogoURL     string `json:"logo_url"`
 	BannerURL   string `json:"banner_url"`
+
+	CreatedBy string    `json:"created_by"`
+	CreatedAt time.Time `json:"created_at"`
+
+	UpdatedBy string    `json:"updated_by"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type LocalRef struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type ShopAddress struct {
-	ID          string `json:"id"`
-	ShopID      string `json:"shop_id"`
-	FullAddress string `json:"full_address"`
+	ID     string `json:"id"`
+	ShopID string `json:"shop_id"`
+
+	Country  LocalRef `json:"country"`
+	Province LocalRef `json:"province"`
+	Ward     LocalRef `json:"ward"`
+
 	AddressLine string `json:"address_line"`
+	FullAddress string `json:"full_address"`
 	ContactName string `json:"contact_name"`
 	PhoneNumber string `json:"phone_number"`
 	Type        string `json:"type"`
 }
 
+type Role struct {
+	ID   int32  `json:"id"`
+	Code string `json:"code"`
+	Name string `json:"name"`
+}
+
 type ShopMember struct {
-	ID      string  `json:"member_id"`
-	Name    string  `json:"member_name"`
-	RoleIDs []int32 `json:"role_ids"`
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	RoleIDs     []int32   `json:"role_ids"`
+	AddedBy     string    `json:"added_by"`
+	NameAddedBy string    `json:"name_added_by"`
+	JoinedAt    time.Time `json:"joined_at"`
+	Roles       []Role    `json:"roles"`
 }
 
 type ShopPage struct {
 	Items         []Shop
 	Total         int64
 	NextPageToken string
-}
-
-func decodeOneOrMany[T any](raw json.RawMessage) []T {
-	if len(raw) == 0 || string(raw) == "null" {
-		return nil
-	}
-	var many []T
-	if err := json.Unmarshal(raw, &many); err == nil {
-		return many
-	}
-	var one T
-	if err := json.Unmarshal(raw, &one); err != nil {
-		return nil
-	}
-	return []T{one}
 }

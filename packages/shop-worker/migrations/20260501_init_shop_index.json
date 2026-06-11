@@ -63,7 +63,7 @@
             },
             "profile": {
                 "properties": {
-                    "shop_id": {
+                    "id": {
                         "type": "keyword"
                     },
                     "description": {
@@ -90,8 +90,9 @@
                     }
                 }
             },
-            "address": {
+            "addresses": {
                 "type": "nested",
+                "dynamic": "strict",
                 "properties": {
                     "id": {
                         "type": "keyword",
@@ -101,19 +102,9 @@
                         "type": "keyword",
                         "normalizer": "standard_normalizer"
                     },
-                    "full_address": {
-                        "type": "text",
-                        "analyzer": "standard_ascii",
-                        "fields": {
-                            "raw": {
-                                "type": "keyword",
-                                "normalizer": "standard_normalizer"
-                            }
-                        }
-                    },
                     "country": {
                         "properties": {
-                            "country_id": {
+                            "id": {
                                 "type": "keyword",
                                 "normalizer": "standard_normalizer"
                             },
@@ -125,7 +116,7 @@
                     },
                     "province": {
                         "properties": {
-                            "province_id": {
+                            "id": {
                                 "type": "keyword",
                                 "normalizer": "standard_normalizer"
                             },
@@ -137,7 +128,7 @@
                     },
                     "ward": {
                         "properties": {
-                            "ward_id": {
+                            "id": {
                                 "type": "keyword",
                                 "normalizer": "standard_normalizer"
                             },
@@ -148,6 +139,16 @@
                         }
                     },
                     "address_line": {
+                        "type": "text",
+                        "analyzer": "standard_ascii",
+                        "fields": {
+                            "raw": {
+                                "type": "keyword",
+                                "normalizer": "standard_normalizer"
+                            }
+                        }
+                    },
+                    "full_address": {
                         "type": "text",
                         "analyzer": "standard_ascii",
                         "fields": {
@@ -190,11 +191,12 @@
             },
             "members": {
                 "type": "nested",
+                "dynamic": "strict",
                 "properties": {
-                    "member_id": {
+                    "id": {
                         "type": "keyword"
                     },
-                    "member_name": {
+                    "name": {
                         "type": "text",
                         "analyzer": "standard_ascii"
                     },
@@ -213,9 +215,10 @@
                     },
                     "roles": {
                         "type": "nested",
+                        "dynamic": "strict",
                         "properties": {
                             "id": {
-                                "type": "keyword"
+                                "type": "integer"
                             },
                             "code": {
                                 "type": "keyword",

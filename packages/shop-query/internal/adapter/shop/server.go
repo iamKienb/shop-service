@@ -35,6 +35,7 @@ func (s *queryServer) GetShopDetail(ctx context.Context, req *connect.Request[ap
 	if err != nil {
 		return nil, err
 	}
+
 	return connect.NewResponse(&api.GetShopDetailResponse{Shop: ToShopView(result.Shop)}), nil
 }
 
@@ -47,6 +48,7 @@ func (s *queryServer) SearchShops(ctx context.Context, req *connect.Request[api.
 	if err != nil {
 		return nil, err
 	}
+
 	return connect.NewResponse(&api.SearchShopsResponse{Shops: ToShopViews(result.Items), Total: result.Total, NextPageToken: result.NextPageToken}), nil
 }
 
@@ -55,6 +57,7 @@ func (s *queryServer) ListShopAddresses(ctx context.Context, req *connect.Reques
 	if err != nil {
 		return nil, err
 	}
+
 	return connect.NewResponse(&api.ListShopAddressesResponse{Addresses: ToShopAddressViews(result.Addresses)}), nil
 }
 
@@ -63,6 +66,7 @@ func (s *queryServer) ListShopMembers(ctx context.Context, req *connect.Request[
 	if err != nil {
 		return nil, err
 	}
+
 	return connect.NewResponse(&api.ListShopMembersResponse{Members: ToShopMemberViews(result.Members)}), nil
 }
 

@@ -101,16 +101,6 @@
                         "type": "keyword",
                         "normalizer": "standard_normalizer"
                     },
-                    "full_address": {
-                        "type": "text",
-                        "analyzer": "standard_ascii",
-                        "fields": {
-                            "raw": {
-                                "type": "keyword",
-                                "normalizer": "standard_normalizer"
-                            }
-                        }
-                    },
                     "country": {
                         "properties": {
                             "country_id": {
@@ -157,6 +147,16 @@
                             }
                         }
                     },
+                    "full_address": {
+                        "type": "text",
+                        "analyzer": "standard_ascii",
+                        "fields": {
+                            "raw": {
+                                "type": "keyword",
+                                "normalizer": "standard_normalizer"
+                            }
+                        }
+                    },
                     "contact_name": {
                         "type": "text",
                         "analyzer": "standard_ascii",
@@ -191,10 +191,10 @@
             "members": {
                 "type": "nested",
                 "properties": {
-                    "member_id": {
+                    "id": {
                         "type": "keyword"
                     },
-                    "member_name": {
+                    "name": {
                         "type": "text",
                         "analyzer": "standard_ascii"
                     },

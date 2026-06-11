@@ -21,7 +21,7 @@ type MigrationLog struct {
 	AppliedAt time.Time `json:"applied_at"`
 }
 
-const MigrationIndex = ".migration_history"
+const MigrationIndex = ".migration_shop_history"
 
 func main() {
 	ctx := context.Background()

@@ -48,6 +48,7 @@ func (s *queryService) GetShopDetail(ctx context.Context, query get_shop_detail.
 	if err != nil {
 		return nil, err
 	}
+
 	return &get_shop_detail.Result{Shop: shop}, nil
 }
 
@@ -95,7 +96,7 @@ func (s *queryService) ListShopMembers(ctx context.Context, query list_shop_memb
 func (s *queryService) findShop(ctx context.Context, shopID string) (*models.Shop, error) {
 	searchQuery := NewQueryBuilder().
 		WithPagination(0, 1).
-		FilterTerm("id.keyword", shopID).
+		FilterTerm("id", shopID).
 		Build()
 
 	result, err := SearchDocuments[models.Shop](ctx, s.esClient, s.index, searchQuery)
